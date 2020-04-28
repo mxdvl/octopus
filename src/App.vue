@@ -1,18 +1,24 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>🐙⚡️</h1>
+    <Calendar :today="today"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+import Calendar from './components/Calendar.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    Calendar
+  },
+  data() {
+    return {
+      today: new Date()
+    }
+  },
 }
 </script>
 
