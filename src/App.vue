@@ -5,9 +5,11 @@
     <div id="inputs">
       skLive <input v-model="skLive" type="text" style="width: 250px"><br>
 
+      <font-awesome-icon icon="bolt" />
       mpan <input v-model="mpan" type="text">
       eSerial <input v-model="eSerial" type="text"><br>
 
+      <font-awesome-icon icon="fire" />
       mprn <input v-model="mprn" type="text">
       gSerial <input v-model="gSerial" type="text"><br>
     </div>
@@ -20,10 +22,21 @@
 // import HelloWorld from './components/HelloWorld.vue'
 import Calendar from './components/Calendar.vue'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faBolt, faFire } from '@fortawesome/free-solid-svg-icons'
+import { faJs, faVuejs } from '@fortawesome/free-brands-svg-icons'
+
+
+library.add(faBolt, faFire, faJs, faVuejs)
+
+// Vue.config.productionTip = false
+
 export default {
   name: 'App',
   components: {
-    Calendar
+    Calendar,
+    'font-awesome-icon': FontAwesomeIcon,
   },
   data() {
     return {
