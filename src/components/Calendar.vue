@@ -14,9 +14,17 @@
         :style="{ gridColumnStart: day.offset }"
         v-for="day in days"
         :key="day.index"><div class="number">{{day.date}}</div>
-        <div class="gas"><FontAwesomeIcon icon="fire" /> <span>?</span> kWh</div>
-        <div class="electricty"><FontAwesomeIcon icon="bolt" /> <span>?</span> kWh</div>
-        <div class="price"><FontAwesomeIcon icon="money-bill-wave" /> £<span>?</span></div>
+        <FontAwesomeIcon icon="fire" />
+        <div class="spacer"></div>
+        <div class="gas"><span>?</span> kWh</div>
+
+        <FontAwesomeIcon icon="bolt" />
+        <div class="spacer"></div>
+        <div class="electricty"><span>?</span> kWh</div>
+
+        <FontAwesomeIcon icon="money-bill-wave" />
+        <div class="spacer"></div>
+        <div class="price">£<span>?</span></div>
       </div>
     </div>
   </div>
@@ -82,12 +90,28 @@
     text-align: left;
     padding: 0.5em;
 
+    display: grid;
+    grid-template-columns: 2em 1fr 4em;
+    justify-items: center;
+    align-items: center;
+    grid-gap: 0.25em;
+
     .number {
       padding: 0.25em;
       line-height: 1em;
       position: absolute;
       right: 0;
       top: 0;
+    }
+
+    .spacer {
+      border-top: 1px solid;
+      height: 1px;
+      width: 100%;
+    }
+
+    .gas, .electricty, .price {
+      justify-self: start;
     }
 
     &:hover {
