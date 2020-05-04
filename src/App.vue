@@ -12,9 +12,11 @@
       <font-awesome-icon icon="fire" />
       mprn <input v-model="mprn" type="text">
       gSerial <input v-model="gSerial" type="text"><br>
+
+      <button @click="tickleTheOctopus('electricity')">Load Data</button>
     </div>
 
-    <Calendar :today="today"/>
+    <Calendar :today="today" :consumption="consumption"/>
   </div>
 </template>
 
@@ -47,6 +49,10 @@ export default {
       eSerial: null,
       mprn: null,
       gSerial: null,
+      consumption: {
+        gas: [],
+        electricity: [],
+      }
     }
   },
   mounted() {
@@ -59,30 +65,64 @@ export default {
 
     if(localStorage.getItem('meters'))
       this.meters = JSON.parse(localStorage.getItem('meters'))
+
+    this.tickleTheOctopus('electricity')
+  },
+  methods: {
+    tickleTheOctopus(type = null) {
+      if(type === null) return null;
+
+      let url = null
+      if(type === 'gas')
+        url = new URL("https://api.octopus.energy/v1/gas-meter-points/"
+                + this.mprn + "/meters/" + this.gSerial + "/consumption/")
+      if(type === 'electricity')
+        url = new URL("https://api.octopus.energy/v1/electricity-meter-points/"
+                + this.mpan + "/meters/" + this.eSerial + "/consumption/")
+
+      url.searchParams.append("group_by","day")
+
+      fetch(url, {
+          headers: {
+            "Authorization": "Basic " + btoa(this.skLive+":")
+          }
+        })
+          .then( response => response.json())
+          .then( data => {
+            // console.log(data)
+            this.consumption[type] = this.consumption[type].concat(data.results)
+
+            if(data.next !== null)
+              this.tickleTheOctopus(data.next, type)
+            else {
+              console.log("All consumed!")
+              // this.consumption[type].map( e => {} )
+            }
+          }).catch( (error) => {
+            console.log("Error:", error)
+          })
+      // return results;
+    }
+
   },
   watch: {
     skLive(newValue) {
-      console.log(newValue)
       localStorage.setItem('skLive', newValue)
     },
 
     mpan(newValue) {
-      console.log(newValue)
       localStorage.setItem('mpan', newValue)
     },
 
     eSerial(newValue) {
-      console.log(newValue)
       localStorage.setItem('eSerial', newValue)
     },
 
     mprn(newValue) {
-      console.log(newValue)
       localStorage.setItem('mprn', newValue)
     },
 
     gSerial(newValue) {
-      console.log(newValue)
       localStorage.setItem('gSerial', newValue)
     },
 

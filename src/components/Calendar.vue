@@ -16,11 +16,11 @@
         :key="day.index"><div class="number">{{day.date}}</div>
         <FontAwesomeIcon icon="fire" />
         <div class="spacer"></div>
-        <div class="gas"><span>?</span> kWh</div>
+        <div class="gas"><span>{{day.gas.consumption}}</span> kWh</div>
 
         <FontAwesomeIcon icon="bolt" />
         <div class="spacer"></div>
-        <div class="electricty"><span>?</span> kWh</div>
+        <div class="electricity"><span>{{day.electricity.consumption}}</span> kWh</div>
 
         <FontAwesomeIcon icon="money-bill-wave" />
         <div class="spacer"></div>
@@ -41,6 +41,10 @@
     name: 'Calendar',
     props: {
       today: Date,
+      consumption: {
+        gas: null,
+        electricity: null,
+      },
     },
     components: {
       FontAwesomeIcon,
@@ -49,8 +53,20 @@
       const weekDays = ["Mon","Tues","Wed","Thu","Fri","Sat","Sun",]
       const date = this.today.getDate();
       const month = this.today.getMonth();
-      const days = [...new Array(31)].map( function(e, i) {
-        return { date: (i+1), today: i+1 === date, month }
+      const days = [...new Array(31)].map( (e, i) => {
+        return {
+          date: (i+1),
+          today: i+1 === date,
+          month,
+        
+          gas: { consumption: 0 },
+
+          electricity: this.consumption.electricity.filter( e => {
+            // console.log(e.interval_start.substring(8,10))
+            return e.interval_start.substring(8,10) === i.toString().padStart(2, "0")
+                && e.interval_start.substring(5,7) === month.toString().padStart(2, "0")
+          }),
+        }
       })
 
       const firstDay =
@@ -62,7 +78,9 @@
 
       days[0].offset = firstDay
 
-      console.log(firstDay, days)
+      // console.log("Consumption:", this.consumption)
+
+      console.log("Days updated: ", firstDay, days)
 
       return {
         weekDays,
@@ -111,7 +129,7 @@
       justify-self: stretch;
     }
 
-    .gas, .electricty, .price {
+    .gas, .electricity, .price {
       justify-self: start;
     }
 
