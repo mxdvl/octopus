@@ -108,6 +108,7 @@
       border-top: 1px solid;
       height: 1px;
       width: 100%;
+      justify-self: stretch;
     }
 
     .gas, .electricty, .price {
