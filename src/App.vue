@@ -1,6 +1,17 @@
 <template>
   <div id="app">
     <h1>🐙⚡️</h1>
+
+    <div id="inputs">
+      skLive <input v-model="skLive" type="text" style="width: 250px"><br>
+
+      mpan <input v-model="mpan" type="text">
+      eSerial <input v-model="eSerial" type="text"><br>
+
+      mprn <input v-model="mprn" type="text">
+      gSerial <input v-model="gSerial" type="text"><br>
+    </div>
+
     <Calendar :today="today"/>
   </div>
 </template>
@@ -16,9 +27,57 @@ export default {
   },
   data() {
     return {
-      today: new Date()
+      today: new Date(),
+      // meters: null,
+      skLive: null,
+      mpan: null,
+      eSerial: null,
+      mprn: null,
+      gSerial: null,
     }
   },
+  mounted() {
+    if(localStorage.getItem('skLive')) this.skLive = localStorage.getItem('skLive')
+
+    if(localStorage.getItem('mpan')) this.mpan = localStorage.getItem('mpan')
+    if(localStorage.getItem('eSerial')) this.eSerial = localStorage.getItem('eSerial')
+    if(localStorage.getItem('mprn')) this.mprn = localStorage.getItem('mprn')
+    if(localStorage.getItem('gSerial')) this.gSerial = localStorage.getItem('gSerial')
+
+    if(localStorage.getItem('meters'))
+      this.meters = JSON.parse(localStorage.getItem('meters'))
+  },
+  watch: {
+    skLive(newValue) {
+      console.log(newValue)
+      localStorage.setItem('skLive', newValue)
+    },
+
+    mpan(newValue) {
+      console.log(newValue)
+      localStorage.setItem('mpan', newValue)
+    },
+
+    eSerial(newValue) {
+      console.log(newValue)
+      localStorage.setItem('eSerial', newValue)
+    },
+
+    mprn(newValue) {
+      console.log(newValue)
+      localStorage.setItem('mprn', newValue)
+    },
+
+    gSerial(newValue) {
+      console.log(newValue)
+      localStorage.setItem('gSerial', newValue)
+    },
+
+    // meters() {
+    //   console.log('meters changed', this.meters)
+    //   localStorage.setItem('meters', JSON.stringify(this.meters))
+    // }
+  }
 }
 </script>
 
