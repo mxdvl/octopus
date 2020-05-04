@@ -4,7 +4,7 @@
 
 - [X] Set-up project
 - [ ] Build robust calendar with correct number of months
-- [ ] Save user data to localStorage (never sent to anyone)
+- [X] Save user data to localStorage (never sent to anyone)
 - [ ] Add Gas metrics
 - [ ] Add Elect metrics
 - [ ] Give some trends info
