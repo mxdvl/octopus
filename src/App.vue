@@ -32,12 +32,8 @@ import Calendar from './components/Calendar.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faBolt, faFire } from '@fortawesome/free-solid-svg-icons'
-import { faJs, faVuejs } from '@fortawesome/free-brands-svg-icons'
 
-
-library.add(faBolt, faFire, faJs, faVuejs)
-
-// Vue.config.productionTip = false
+library.add(faBolt, faFire)
 
 export default {
   name: 'App',
