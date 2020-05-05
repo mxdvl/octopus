@@ -13,10 +13,15 @@
       mprn <input v-model="mprn" type="text">
       gSerial <input v-model="gSerial" type="text"><br>
 
-      <button @click="tickleTheOctopus('electricity')">Load Data</button>
+      <button @click="tickleTheOctopus('electricity')">Load <font-awesome-icon icon="bolt" /> Data</button>
+      <button @click="tickleTheOctopus('gas')">Load <font-awesome-icon icon="fire" /> Data</button>
+
+      <br><br>
+
+      <input v-model="date" type="text">
     </div>
 
-    <Calendar :today="today" :consumption="consumption"/>
+    <Calendar v-if="consumption.length" :today="today" :consumption="consumption"/>
   </div>
 </template>
 
@@ -41,18 +46,18 @@ export default {
     'font-awesome-icon': FontAwesomeIcon,
   },
   data() {
+    const today = new Date()
     return {
-      today: new Date(),
+      today,
+      date: today.toISOString().substring(0,10),
+
       // meters: null,
       skLive: null,
       mpan: null,
       eSerial: null,
       mprn: null,
       gSerial: null,
-      consumption: {
-        gas: [],
-        electricity: [],
-      }
+      consumption: [],
     }
   },
   mounted() {
@@ -65,8 +70,6 @@ export default {
 
     if(localStorage.getItem('meters'))
       this.meters = JSON.parse(localStorage.getItem('meters'))
-
-    this.tickleTheOctopus('electricity')
   },
   methods: {
     tickleTheOctopus(type = null) {
@@ -90,12 +93,40 @@ export default {
           .then( response => response.json())
           .then( data => {
             // console.log(data)
-            this.consumption[type] = this.consumption[type].concat(data.results)
+
+            data.results.map( element => {
+              const date = element.interval_start;//.substring(0,10)
+              const consumed = element.consumption
+              
+              const index = this.consumption.findIndex( e => {
+                // console.log("dates", date, e.date)
+                return e.date.substring(0,10) === date.substring(0,10)
+              })
+
+              // console.log("index", index)
+
+              if(index >= 0) {
+                const value = Object.assign({},
+                  this.consumption[index],
+                  {[type]: consumed}
+                )
+                this.consumption.splice(index, 1, value)
+              } else {
+                // const realDate = new Date(date)  
+                this.consumption.push({
+                  date,
+                  // week: realDate.getUTCDay(),
+                  [type]: consumed,
+                })
+              }
+            })
+
+            // console.log("New Days:", this.consumption)
 
             if(data.next !== null)
               this.tickleTheOctopus(data.next, type)
             else {
-              console.log("All consumed!")
+              console.log("All "+type+" consumed!")
               // this.consumption[type].map( e => {} )
             }
           }).catch( (error) => {
@@ -125,6 +156,10 @@ export default {
     gSerial(newValue) {
       localStorage.setItem('gSerial', newValue)
     },
+
+    date(newValue) {
+      this.today = new Date(newValue)
+    }
 
     // meters() {
     //   console.log('meters changed', this.meters)
