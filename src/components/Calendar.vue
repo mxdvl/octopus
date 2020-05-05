@@ -1,6 +1,6 @@
 <template>
   <div class="calendar">
-    <h2>{{ today }}</h2>
+    <h2>{{ month }}</h2>
     <div class="boxes" v-if="days.length">
       <div
         class="box top"
@@ -35,6 +35,7 @@
         <!-- <div class="debug">{{day}}</div> -->
       </div>
     </div>
+    <div v-else>No data available!</div>
   </div>
 </template>
 
@@ -73,6 +74,10 @@
         return this.consumption.filter( e =>
           e.date.substring(5,7) === this.today.toISOString().substring(5,7)
         ).sort((a,b) => dateSort(a.date, b.date))
+      },
+      month: function () {
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "Spetember", "October", "November", "December",]
+        return months[this.today.getMonth()] + " " + this.today.getFullYear()
       },
       max: function() {
         const max = {

@@ -7,31 +7,31 @@
     </header>
 
     <div id="inputs">
-      skLive <input v-model="skLive" type="text" style="width: 250px"><br>
+      <!-- skLive <input v-model="skLive" type="text" style="width: 250px"><br> -->
 
-      <font-awesome-icon icon="bolt" />
-      mpan <input v-model="mpan" type="text">
-      eSerial <input v-model="eSerial" type="text"><br>
+      <Input v-model="skLive" name="API Key" icon="key" style="grid-column: span 3"/>
 
-      <font-awesome-icon icon="fire" />
-      mprn <input v-model="mprn" type="text">
-      gSerial <input v-model="gSerial" type="text"><br>
+      <Input v-model="mpan" label="mpan" name="MPAN" icon="bolt" />
+      <Input v-model="eSerial" label="eSerial" name="Serial" icon="bolt" />
+      <button @click="tickleTheOctopus('electricity')">Load <font-awesome-icon icon="bolt" /> Data</button>  
 
-      <button @click="tickleTheOctopus('electricity')">Load <font-awesome-icon icon="bolt" /> Data</button>
+      <Input v-model="mprn" label="mprn" name="MPRN" icon="fire" />
+      <Input v-model="gSerial" label="gSerial" name="Serial" icon="fire" />
       <button @click="tickleTheOctopus('gas')">Load <font-awesome-icon icon="fire" /> Data</button>
 
-      <br><br>
-
-      <input v-model="date" type="text">
+      <Input v-model="year" label="year" name="Year" icon="star" />
+      <Input v-model="month" label="month" name="Month" icon="star" />
+      <!-- <input v-model="month" type="number"> -->
+      <input v-model="day" type="number">
     </div>
 
-    <Calendar v-if="consumption.length" :today="today" :consumption="consumption"/>
+    <Calendar v-if="consumption.length" :today="today" :consumption="consumption" />
   </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
 import Calendar from './components/Calendar.vue'
+import Input from './components/Input.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -43,21 +43,32 @@ export default {
   name: 'App',
   components: {
     Calendar,
+    Input,
     'font-awesome-icon': FontAwesomeIcon,
   },
   data() {
     const today = new Date()
+
+    // console.log(today.getUTCYear())
+
     return {
       today,
-      date: today.toISOString().substring(0,10),
+      year: today.getFullYear(),
+      month: today.getMonth()+1,
+      day: today.getDate(),
 
-      // meters: null,
       skLive: null,
       mpan: null,
       eSerial: null,
       mprn: null,
       gSerial: null,
       consumption: [],
+    }
+  },
+  computed: {
+    date: function () {
+      const date = new Date(this.year, this.month-1, this.day, 11)
+      return date.toISOString().substring(0,10)
     }
   },
   mounted() {
@@ -183,7 +194,7 @@ header {
   font-size: 1rem;
   padding: 0.5em;
   display: flex;
-  justify-content: center;
+  justify-items: center;
   align-items: center;
   line-height: 1;
 
@@ -195,6 +206,17 @@ header {
     margin: 0;
   }
 }
+
+#inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 6em;
+  gap: 0.25em;
+  margin: auto;
+
+  max-width: 36em;
+}
+
+
 
 a {
   color: orange;
