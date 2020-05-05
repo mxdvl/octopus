@@ -6,7 +6,7 @@
       <h2>[<a href="https://github.com/mxdvl/octopus/">github repo</a>]</h2>
     </header>
 
-    <div id="inputs">
+    <div id="inputs" v-if="!dataLoaded">
       <!-- skLive <input v-model="skLive" type="text" style="width: 250px"><br> -->
 
       <Input v-model="skLive" name="API Key" icon="key" style="grid-column: span 3"/>
@@ -21,11 +21,13 @@
 
       <Input v-model="year" label="year" name="Year" icon="star" />
       <Input v-model="month" label="month" name="Month" icon="star" />
-      <!-- <input v-model="month" type="number"> -->
       <input v-model="day" type="number">
     </div>
 
     <Calendar v-if="consumption.length" :today="today" :consumption="consumption" />
+    
+    <h3 v-if="error">{{ error }}</h3>
+    <button v-if="dataLoaded" @click="clearOut">Change Inputs</button>
   </div>
 </template>
 
@@ -57,6 +59,9 @@ export default {
       month: today.getMonth()+1,
       day: today.getDate(),
 
+      dataLoaded: false,
+      errors: null,
+
       skLive: null,
       mpan: null,
       eSerial: null,
@@ -81,8 +86,18 @@ export default {
 
     if(localStorage.getItem('meters'))
       this.meters = JSON.parse(localStorage.getItem('meters'))
+
+    if(this.mpan && this.eSerial)
+      this.tickleTheOctopus('electricity')
+    if(this.mprn && this.gSerial)
+      this.tickleTheOctopus('gas')
   },
   methods: {
+    clearOut() {
+      this.consumption = []
+      this.error = null
+      this.dataLoaded = false
+    },
     tickleTheOctopus(type = null) {
       if(type === null) return null;
 
@@ -137,10 +152,13 @@ export default {
             if(data.next !== null)
               this.tickleTheOctopus(data.next, type)
             else {
+              this.error = null
+              this.dataLoaded = true
               console.log("All "+type+" consumed!")
               // this.consumption[type].map( e => {} )
             }
           }).catch( (error) => {
+            this.error = error;
             console.log("Error:", error)
           })
       // return results;
@@ -181,7 +199,13 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  margin: 0;
+  padding: 0;
+}
+
 $colour : #2c3e50;
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -193,6 +217,7 @@ $colour : #2c3e50;
 header {
   font-size: 1rem;
   padding: 0.5em;
+  margin-bottom: 0.5em;
   display: flex;
   justify-items: center;
   align-items: center;
