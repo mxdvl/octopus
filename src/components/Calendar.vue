@@ -20,7 +20,7 @@
         :key="day.index"><div class="number">{{ day.date.substring(8,10) }}</div>
         <FontAwesomeIcon icon="fire" />
         <div class="spacer"></div>
-        <div class="gas"><span>{{ parseFloat(day.gas).toFixed(2) }}</span> kWh</div>
+        <div class="gas"><span>{{ parseFloat(day.gas).toFixed(2) }}</span> m<sup>3</sup></div>
 
         <FontAwesomeIcon icon="bolt" />
         <div class="spacer"></div>

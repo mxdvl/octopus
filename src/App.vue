@@ -6,7 +6,8 @@
       <h2>[<a href="https://github.com/mxdvl/octopus/">github repo</a>]</h2>
     </header>
 
-    <div id="inputs" v-if="!dataLoaded">
+    <button @click="toggleInputs">{{ showInputs ? 'Hide' : 'Show' }} inputs</button>
+    <div id="inputs" v-if="showInputs">
       <!-- skLive <input v-model="skLive" type="text" style="width: 250px"><br> -->
 
       <Input v-model="skLive" name="API Key" icon="key" style="grid-column: span 3"/>
@@ -27,7 +28,7 @@
     <Calendar v-if="consumption.length" :today="today" :consumption="consumption" />
     
     <h3 v-if="error">{{ error }}</h3>
-    <button v-if="dataLoaded" @click="clearOut">Change Inputs</button>
+    <button v-if="dataLoaded" @click="clearOut">Clear Data</button>
   </div>
 </template>
 
@@ -60,6 +61,7 @@ export default {
       day: today.getDate(),
 
       dataLoaded: false,
+      showInputs: true,
       errors: null,
 
       skLive: null,
@@ -97,6 +99,9 @@ export default {
       this.consumption = []
       this.error = null
       this.dataLoaded = false
+    },
+    toggleInputs() {
+      this.showInputs = !this.showInputs
     },
     tickleTheOctopus(type = null) {
       if(type === null) return null;
@@ -238,12 +243,17 @@ header {
   gap: 0.25em;
   margin: auto;
 
-  max-width: 36em;
+  width: 36em;
+  max-width: 100%;
 }
-
-
 
 a {
   color: orange;
+}
+
+@media screen and (max-width: 36rem) {
+  #inputs {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
