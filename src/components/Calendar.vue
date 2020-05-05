@@ -10,21 +10,27 @@
       </div>
       <div
         class="box day"
-        :class="{ today: day.today }"
+        :class="{
+          today: day.today,
+          highE: parseFloat(day.electricity) > 0.75 * max.electricity,
+          highG: parseFloat(day.gas) > 0.75 * max.gas,
+        }"
         :style="{ gridColumnStart: new Date(day.date).getDay()+1 }"
         v-for="day in days"
         :key="day.index"><div class="number">{{ day.date.substring(8,10) }}</div>
-        <FontAwesomeIcon v-if="day.gas" icon="fire" />
-        <div v-if="day.gas" class="spacer"></div>
-        <div v-if="day.gas" class="gas"><span>{{ parseFloat(day.gas).toFixed(2) }}</span> kWh</div>
+        <FontAwesomeIcon icon="fire" />
+        <div class="spacer"></div>
+        <div class="gas"><span>{{ parseFloat(day.gas).toFixed(2) }}</span> kWh</div>
 
-        <FontAwesomeIcon v-if="day.electricity" icon="bolt" />
-        <div v-if="day.electricity" class="spacer"></div>
-        <div v-if="day.electricity" class="electricity"><span>{{ parseFloat(day.electricity).toFixed(2) }}</span> kWh</div>
+        <FontAwesomeIcon icon="bolt" />
+        <div class="spacer"></div>
+        <div class="electricity"><span>{{ parseFloat(day.electricity).toFixed(2) }}</span> kWh</div>
 
+        <!-- 
         <FontAwesomeIcon icon="money-bill-wave" />
         <div class="spacer"></div>
         <div class="price">£<span>?</span></div>
+        -->
 
         <!-- <div class="debug">{{day}}</div> -->
       </div>
@@ -68,6 +74,20 @@
           e.date.substring(5,7) === this.today.toISOString().substring(5,7)
         ).sort((a,b) => dateSort(a.date, b.date))
       },
+      max: function() {
+        const max = {
+          gas: 0,
+          electricity: 0,
+        }
+        this.days.map( e => {
+          if( max.electricity < e.electricity )
+            max.electricity = e.electricity
+          if( max.gas < e.gas )
+            max.gas = e.gas
+        })
+        console.log(max)
+        return max
+      }
     },
   }
 </script>
@@ -95,6 +115,14 @@
     justify-items: center;
     align-items: center;
     grid-gap: 0.25em;
+
+    &.highG, &.highE {
+      color: darkred;
+    }
+
+    &.highG.highE {
+      color: red;
+    }
 
     .number {
       padding: 0.25em;
