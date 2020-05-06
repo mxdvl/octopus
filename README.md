@@ -19,7 +19,7 @@ API Keys and meters data is saved in localStorage and all quries and calculation
 - [ ] Give some trends info
 - [ ] Quick month navigation
 - [X] Learn about my energy usage!
-- [ ] Favicon
+- [X] Favicon
 - [ ] Styling / hiding inputs
 
 ## Disclaimer
