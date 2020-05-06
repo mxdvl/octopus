@@ -1,7 +1,7 @@
 <template>
   <div class="calendar">
-    <h2>{{ month }}</h2>
     <div class="boxes" v-if="days.length">
+      <h2>{{ month }}</h2>
       <div
         class="box top"
         v-for="weekDay in weekDays"
@@ -106,6 +106,10 @@
     grid-gap: $size;
     background: #eee;
     padding-bottom: $size;
+
+    h2 {
+      grid-column: span 7
+    }
   }
 
   .box.day {

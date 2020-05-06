@@ -4,9 +4,12 @@
       <h1>🐙⚡️ Dashboard</h1>
 
       <h2>[<a href="https://github.com/mxdvl/octopus/">github repo</a>]</h2>
+
+      <button @click="toggleInputs">{{ showInputs ? 'Hide' : 'Show' }} inputs</button>
+
+      <button v-if="dataLoaded" @click="clearOut">Clear Data</button>
     </header>
 
-    <button @click="toggleInputs">{{ showInputs ? 'Hide' : 'Show' }} inputs</button>
     <div id="inputs" v-if="showInputs">
       <!-- skLive <input v-model="skLive" type="text" style="width: 250px"><br> -->
 
@@ -31,7 +34,6 @@
     <Calendar v-if="consumption.length" :today="today" :consumption="consumption" />
     
     <h3 v-if="errors">{{ errors }}</h3>
-    <button v-if="dataLoaded" @click="clearOut">Clear Data</button>
   </div>
 </template>
 
@@ -218,6 +220,10 @@ body {
 
 $colour : #2c3e50;
 
+html {
+  --colour: $colour;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -229,9 +235,9 @@ $colour : #2c3e50;
 header {
   font-size: 1rem;
   padding: 0.5em;
-  margin-bottom: 0.5em;
   display: flex;
   justify-items: center;
+  justify-content: center;
   align-items: center;
   line-height: 1;
 
@@ -239,19 +245,25 @@ header {
   color: white;
 
   > * {
-    padding: 0.5em;
-    margin: 0;
+    padding: 0.5rem;
+    margin: 0 0.5rem;
   }
 }
 
 #inputs {
   display: grid;
-  grid-template-columns: 1fr 1fr 6em;
+  grid-template-columns: 1fr 1fr 8em;
   gap: 0.25em;
   margin: auto;
 
-  width: 36em;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: calc(50vw - 24em);
+  padding-right: calc(50vw - 24em);
+
   max-width: 100%;
+  background-color: $colour;
+  color: white;
 }
 
 a {
