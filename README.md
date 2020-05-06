@@ -17,6 +17,7 @@ API Keys and meters data is saved in localStorage and all quries and calculation
 - [X] Add Gas metrics
 - [X] Add Elect metrics
 - [ ] Give some trends info
+- [ ] Quick month navigation
 - [X] Learn about my energy usage!
 - [ ] Favicon
 - [ ] Styling / hiding inputs
@@ -27,25 +28,9 @@ This project is provided as is. **Do not** share your API keys with anyone.
 
 ---
 
-## Project setup
+## VUE.js Commands
 ```
-yarn install
+yarn install # Installs dependencies
+yarn serve # Compiles and hot-reloads for development
+yarn build # Compiles and minifies for production
 ```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
