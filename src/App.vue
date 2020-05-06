@@ -22,12 +22,15 @@
 
       <Input v-model="year" label="year" name="Year" icon="star" />
       <Input v-model="month" label="month" name="Month" icon="star" />
-      <input v-model="day" type="number">
+      <button @click="loadAll">Load All Data</button>
+      <!-- <input v-model="day" type="number"> -->
+
+      <h5 style="margin: 0; grid-column: span 2">To find this information, <a href="https://octopus.energy/dashboard/developer/">log into on your dashboard</a></h5>
     </div>
 
     <Calendar v-if="consumption.length" :today="today" :consumption="consumption" />
     
-    <h3 v-if="error">{{ error }}</h3>
+    <h3 v-if="errors">{{ errors }}</h3>
     <button v-if="dataLoaded" @click="clearOut">Clear Data</button>
   </div>
 </template>
@@ -56,9 +59,9 @@ export default {
 
     return {
       today,
-      year: today.getFullYear(),
-      month: today.getMonth()+1,
-      day: today.getDate(),
+      year: today.getFullYear().toString(),
+      month: (today.getMonth()+1).toString(),
+      day: today.getDate().toString(),
 
       dataLoaded: false,
       showInputs: true,
@@ -102,6 +105,10 @@ export default {
     },
     toggleInputs() {
       this.showInputs = !this.showInputs
+    },
+    loadAll() {
+      this.tickleTheOctopus('electricity')
+      this.tickleTheOctopus('gas')
     },
     tickleTheOctopus(type = null) {
       if(type === null) return null;
@@ -163,7 +170,7 @@ export default {
               // this.consumption[type].map( e => {} )
             }
           }).catch( (error) => {
-            this.error = error;
+            this.errors = error;
             console.log("Error:", error)
           })
       // return results;
