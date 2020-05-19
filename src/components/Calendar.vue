@@ -12,8 +12,9 @@
         class="box day"
         :class="{
           today: day.today,
-          highE: parseFloat(day.electricity) > 0.75 * max.electricity,
-          highG: parseFloat(day.gas) > 0.75 * max.gas,
+          low:     parseFloat(day.price) < 0.50 * max.price,
+          high:    parseFloat(day.price) > 0.80 * max.price,
+          highest: parseFloat(day.price) > 0.95 * max.price,
         }"
         :style="{ gridColumnStart: new Date(day.date).getDay()+1 }"
         v-for="day in days"
@@ -26,11 +27,11 @@
         <div class="spacer"></div>
         <div class="electricity"><span>{{ parseFloat(day.electricity).toFixed(2) }}</span> kWh</div>
 
-        <!-- 
-        <FontAwesomeIcon icon="money-bill-wave" />
-        <div class="spacer"></div>
-        <div class="price">£<span>?</span></div>
-        -->
+        
+        <FontAwesomeIcon icon="money-bill-wave" v-if="day.price" />
+        <div class="spacer" v-if="day.price"></div>
+        <div class="price" v-if="day.price">£<span>{{ day.price.toFixed(2) }}</span></div>
+       
 
         <!-- <div class="debug">{{day}}</div> -->
       </div>
@@ -67,13 +68,32 @@
 
       return {
         weekDays,
+        unitRate: {
+          gas: 0.0323 * (1.02264 * 39.1 / 3.6),
+          electricity: 0.1363,
+        },
+        standingCharge: {
+          gas: 0.1600,
+          electricity: 0.1911,
+        }
       }
     },
     computed: {
       days: function () {
-        return this.consumption.filter( e =>
+        const days = this.consumption.filter( e =>
           e.date.substring(5,7) === this.today.toISOString().substring(5,7)
         ).sort((a,b) => dateSort(a.date, b.date))
+
+        days.forEach( day => {
+          if(day.gas !== undefined && day.electricity !== undefined)
+            day.price =
+                this.standingCharge.gas
+              + this.unitRate.gas * day.gas
+              + this.standingCharge.electricity
+              + this.unitRate.electricity * day.electricity
+        })
+
+        return days;
       },
       month: function () {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "Spetember", "October", "November", "December",]
@@ -83,12 +103,15 @@
         const max = {
           gas: 0,
           electricity: 0,
+          price: 0,
         }
         this.days.map( e => {
           if( max.electricity < e.electricity )
             max.electricity = e.electricity
           if( max.gas < e.gas )
             max.gas = e.gas
+          if( max.price < e.price )
+            max.price = e.price
         })
         console.log(max)
         return max
@@ -125,12 +148,16 @@
     align-items: center;
     grid-gap: 0.25em;
 
-    &.highG, &.highE {
+    &.low {
+      color: darkgreen;
+    }
+
+    &.high {
       color: darkred;
     }
 
-    &.highG.highE {
-      color: red;
+    &.highest {
+      color: orangered;
     }
 
     .number {
