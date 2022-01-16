@@ -55,7 +55,7 @@
   }
 
   export default {
-    name: 'Calendar',
+    name: 'CalendarMonth',
     props: {
       today: Date,
       consumption: Array,
