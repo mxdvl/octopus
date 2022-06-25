@@ -18,7 +18,7 @@
     "@vue/cli-plugin-eslint": "4.5.18",
     "@vue/cli-service": "4.5.18",
     "babel-eslint": "10.1.0",
-    "core-js": "3.23.2",
+    "core-js": "3.23.3",
     "eslint": "6.8.0",
     "eslint-plugin-vue": "9.1.1",
     "sass": "1.53.0",
