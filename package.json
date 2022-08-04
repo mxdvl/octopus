@@ -11,7 +11,7 @@
     "@fortawesome/fontawesome-svg-core": "6.1.2",
     "@fortawesome/free-solid-svg-icons": "6.1.2",
     "@fortawesome/vue-fontawesome": "2.0.8",
-    "vue": "2.7.8"
+    "vue": "3.2.37"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5",
@@ -21,7 +21,7 @@
     "core-js": "3.24.1",
     "eslint": "8.21.0",
     "eslint-plugin-vue": "9.3.0",
-    "sass": "1.54.0",
+    "sass": "1.54.2",
     "sass-loader": "8.0.2",
     "vue-template-compiler": "2.7.8"
   },
